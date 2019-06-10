@@ -1,20 +1,31 @@
 package sample;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class JavaPostRequest {
+class Api {
 
     private static HttpURLConnection con;
+    private String token;
 
-    public static String login(String email, String password) throws IOException {
+    private static Api ApiInstance = new Api();
+
+    private Api() {
+    }
+
+    static Api getInstance() {
+        return ApiInstance;
+    }
+
+    void login(String email, String password) throws IOException {
 
         String url = "http://localhost:3000/auth";
         String urlParameters = "email=" + email + "&password=" + password;
@@ -48,13 +59,17 @@ public class JavaPostRequest {
                 }
             }
 
-            System.out.println(content.toString());
+            JsonObject tokenJson = new JsonParser().parse(content.toString()).getAsJsonObject();
 
-            return content.toString();
+            this.token = tokenJson.get("token").getAsString();
 
         } finally {
 
             con.disconnect();
         }
+    }
+
+    String getToken() {
+        return token;
     }
 }

@@ -1,9 +1,14 @@
 package sample;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class Controller {
@@ -12,22 +17,35 @@ public class Controller {
     @FXML
     private TextField passwordField;
 
+    private Api apiInstance = Api.getInstance();
+
     @FXML
-    public void onLoginButtonClicked() {
-        System.out.println("email: " + emailField.getText());
-        System.out.println("password: " + passwordField.getText());
+    public void onLoginButtonClicked(ActionEvent event) {
 
         try {
-            String tokenJsonString = JavaPostRequest.login(emailField.getText(), passwordField.getText());
+            apiInstance.login(emailField.getText(), passwordField.getText());
 
-            JsonObject tokenJson = new JsonParser().parse(tokenJsonString).getAsJsonObject();
+            Parent tableViewParent = FXMLLoader.load(getClass().getResource("menu.fxml"));
+            Scene tableViewScene = new Scene(tableViewParent);
 
-            String token = tokenJson.get("token").getAsString();
+            //This line gets the Stage information
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            System.out.println(token);
+            window.setScene(tableViewScene);
+            window.show();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    @FXML
+    public void loadMenu() {
+        try {
+            String products = Product.getFromStock(apiInstance.getToken());
+
+            System.out.println(products);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
