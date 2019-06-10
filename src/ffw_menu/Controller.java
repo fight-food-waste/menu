@@ -1,4 +1,4 @@
-package sample;
+package ffw_menu;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

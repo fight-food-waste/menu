@@ -1,4 +1,4 @@
-package sample;
+package ffw_menu;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
