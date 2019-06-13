@@ -52,8 +52,18 @@ public class Controller {
             for (JsonElement product : productsJson) {
                 JsonObject productObj = product.getAsJsonObject();
                 String barcode = productObj.get("barcode").getAsString();
+                String productInfo = OpenFoodFacts.getProductInfo(barcode);
+                JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
+                JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
+                JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
+                Gson gson = new Gson();
+                ArrayList<String> categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
 
-                System.out.println(barcode);
+                if (categoriesList.contains("en:meals")) {
+                    System.out.println("It's a meal");
+                } else if (categoriesList.contains("en:desserts")) {
+                    System.out.println("It's a dessert");
+                }
             }
 
         } catch (IOException e) {
