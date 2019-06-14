@@ -57,7 +57,7 @@ public class Controller {
                 JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
                 JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
                 Gson gson = new Gson();
-                ArrayList<String> categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
+                ArrayList categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
 
                 if (categoriesList.contains("en:meals")) {
                     System.out.println("It's a meal");
