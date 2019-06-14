@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -18,6 +19,11 @@ public class Controller {
     private TextField emailField;
     @FXML
     private TextField passwordField;
+    @FXML
+    private ListView mealsListView;
+    @FXML
+    private ListView dessertsListView;
+
 
     private Api apiInstance = Api.getInstance();
 
@@ -49,9 +55,13 @@ public class Controller {
 
             JsonArray productsJson = new JsonParser().parse(products).getAsJsonArray();
 
+            ArrayList<String> mealsList = new ArrayList<String>();
+            ArrayList<String> dessertsList = new ArrayList<String>();
+
             for (JsonElement product : productsJson) {
                 JsonObject productObj = product.getAsJsonObject();
                 String barcode = productObj.get("barcode").getAsString();
+                String name = productObj.get("name").getAsString();
                 String productInfo = OpenFoodFacts.getProductInfo(barcode);
                 JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
                 JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
@@ -61,11 +71,16 @@ public class Controller {
 
                 if (categoriesList.contains("en:meals")) {
                     System.out.println("It's a meal");
+                    mealsList.add(name);
+
                 } else if (categoriesList.contains("en:desserts")) {
                     System.out.println("It's a dessert");
+                    dessertsList.add(name);
                 }
             }
 
+            mealsListView.getItems().addAll(mealsList);
+            dessertsListView.getItems().addAll(dessertsList);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
