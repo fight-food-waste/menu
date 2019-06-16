@@ -36,7 +36,7 @@ public class Controller {
             Parent tableViewParent = FXMLLoader.load(getClass().getResource("menu.fxml"));
             Scene tableViewScene = new Scene(tableViewParent);
 
-            //This line gets the Stage information
+            // This line gets the Stage information
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             window.setScene(tableViewScene);
@@ -48,6 +48,9 @@ public class Controller {
 
     @FXML
     public void loadMenu() {
+        mealsListView.getItems().clear();
+        dessertsListView.getItems().clear();
+
         try {
             String products = Product.getFromStock(apiInstance.getToken());
 
@@ -81,6 +84,7 @@ public class Controller {
 
             mealsListView.getItems().addAll(mealsList);
             dessertsListView.getItems().addAll(dessertsList);
+
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
