@@ -57,8 +57,8 @@ public class Controller {
 
         JsonArray productsJson = new JsonParser().parse(products).getAsJsonArray();
 
-        ArrayList<String> mealsList = new ArrayList<String>();
-        ArrayList<String> dessertsList = new ArrayList<String>();
+        ArrayList<String> mealsList = new ArrayList<>();
+        ArrayList<String> dessertsList = new ArrayList<>();
 
         for (JsonElement product : productsJson) {
             JsonObject productObj = product.getAsJsonObject();

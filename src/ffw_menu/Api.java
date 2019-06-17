@@ -1,18 +1,11 @@
 package ffw_menu;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-
-import java.net.HttpURLConnection;
 
 class Api {
 
-    private static HttpURLConnection con;
     private String token;
-
     private static Api ApiInstance = new Api();
 
     private Api() {
@@ -26,11 +19,10 @@ class Api {
 
         String url = "http://localhost:3000/auth";
 
-        HttpResponse<JsonNode> jsonResponse = Unirest.post(url).field("email", email).field("password", password).asJson();
+        String tokenRawJson = Unirest.post(url).field("email", email).field("password", password).asJson().getBody().toString();
 
-        if (!jsonResponse.getBody().toString().isEmpty()) {
-            JsonObject tokenJson = new JsonParser().parse(jsonResponse.getBody().toString()).getAsJsonObject();
-            this.token = tokenJson.get("token").getAsString();
+        if (!tokenRawJson.isEmpty()) {
+            this.token = new JsonParser().parse(tokenRawJson).getAsJsonObject().get("token").getAsString();
         }
     }
 
