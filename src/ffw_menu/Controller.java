@@ -51,42 +51,38 @@ public class Controller {
         mealsListView.getItems().clear();
         dessertsListView.getItems().clear();
 
-        try {
-            String products = Product.getFromStock(apiInstance.getToken());
+        String products = Product.getFromStock();
 
-            System.out.println(products);
+        System.out.println(products);
 
-            JsonArray productsJson = new JsonParser().parse(products).getAsJsonArray();
+        JsonArray productsJson = new JsonParser().parse(products).getAsJsonArray();
 
-            ArrayList<String> mealsList = new ArrayList<String>();
-            ArrayList<String> dessertsList = new ArrayList<String>();
+        ArrayList<String> mealsList = new ArrayList<String>();
+        ArrayList<String> dessertsList = new ArrayList<String>();
 
-            for (JsonElement product : productsJson) {
-                JsonObject productObj = product.getAsJsonObject();
-                String barcode = productObj.get("barcode").getAsString();
-                String name = productObj.get("name").getAsString();
-                String productInfo = OpenFoodFacts.getProductInfo(barcode);
-                JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
-                JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
-                JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
-                Gson gson = new Gson();
-                ArrayList categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
+        for (JsonElement product : productsJson) {
+            JsonObject productObj = product.getAsJsonObject();
+            String barcode = productObj.get("barcode").getAsString();
+            String name = productObj.get("name").getAsString();
+            String productInfo = OpenFoodFacts.getProductInfo(barcode);
+            JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
+            JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
+            JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
+            Gson gson = new Gson();
+            ArrayList categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
 
-                if (categoriesList.contains("en:meals")) {
-                    System.out.println("It's a meal");
-                    mealsList.add(name);
+            if (categoriesList.contains("en:meals")) {
+                System.out.println("It's a meal");
+                mealsList.add(name);
 
-                } else if (categoriesList.contains("en:desserts")) {
-                    System.out.println("It's a dessert");
-                    dessertsList.add(name);
-                }
+            } else if (categoriesList.contains("en:desserts")) {
+                System.out.println("It's a dessert");
+                dessertsList.add(name);
             }
-
-            mealsListView.getItems().addAll(mealsList);
-            dessertsListView.getItems().addAll(dessertsList);
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
+
+        mealsListView.getItems().addAll(mealsList);
+        dessertsListView.getItems().addAll(dessertsList);
+
     }
 }
