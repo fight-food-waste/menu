@@ -53,8 +53,6 @@ public class Controller {
 
         String products = Product.getFromStock();
 
-        System.out.println(products);
-
         JsonArray productsJson = new JsonParser().parse(products).getAsJsonArray();
 
         ArrayList<String> mealsList = new ArrayList<>();
@@ -72,11 +70,8 @@ public class Controller {
             ArrayList categoriesList = gson.fromJson(categoriesTag.toString(), ArrayList.class);
 
             if (categoriesList.contains("en:meals")) {
-                System.out.println("It's a meal");
                 mealsList.add(name);
-
             } else if (categoriesList.contains("en:desserts")) {
-                System.out.println("It's a dessert");
                 dessertsList.add(name);
             }
         }
