@@ -7,59 +7,80 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-          minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
+          minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.999-ea"
           fx:controller="ffw_menu.Controller">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-       <Button mnemonicParsing="false" onAction="#loadMenu" text="Load products">
-           <GridPane.margin>
-               <Insets left="100.0" top="40.0"/>
-           </GridPane.margin>
-       </Button>
-       <ListView fx:id="dessertsListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                 GridPane.rowIndex="1">
-           <GridPane.margin>
-               <Insets left="10.0" right="10.0"/>
-           </GridPane.margin>
-       </ListView>
-       <ListView fx:id="mealsListView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-           <GridPane.margin>
-               <Insets left="10.0" right="10.0"/>
-           </GridPane.margin>
-       </ListView>
-       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
-           <image>
-               <Image url="@logo-ffw.png"/>
-           </image>
-           <GridPane.margin>
-               <Insets left="100.0"/>
-           </GridPane.margin>
-       </ImageView>
-       <Label text="Meals">
-           <GridPane.margin>
-               <Insets left="140.0" top="110.0"/>
-           </GridPane.margin>
-       </Label>
-       <Label prefHeight="23.0" prefWidth="140.0" text="Menu generator">
-           <GridPane.margin>
-               <Insets bottom="50.0" left="90.0"/>
-           </GridPane.margin>
-           <font>
-               <Font name="System Font" size="18.0"/>
-           </font>
-       </Label>
-       <Label text="Desserts" GridPane.columnIndex="1">
-           <GridPane.margin>
-               <Insets left="130.0" top="110.0"/>
-           </GridPane.margin>
-       </Label>
-   </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <Button mnemonicParsing="false" onAction="#loadMenu" text="Load products">
+        <GridPane.margin>
+            <Insets left="50.0" top="40.0"/>
+        </GridPane.margin>
+    </Button>
+    <Button mnemonicParsing="false" onAction="#loadRecipies" text="Load recipes">
+        <GridPane.margin>
+            <Insets left="170.0" top="40.0"/>
+        </GridPane.margin>
+    </Button>
+    <ListView fx:id="dessertsListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets left="10.0" right="10.0"/>
+        </GridPane.margin>
+    </ListView>
+    <ListView fx:id="mealsListView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets left="10.0" right="10.0"/>
+        </GridPane.margin>
+    </ListView>
+    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+        <GridPane.margin>
+            <Insets left="100.0"/>
+        </GridPane.margin>
+        <Image url="@logo-ffw.png"/>
+    </ImageView>
+    <Label text="Meals">
+        <GridPane.margin>
+            <Insets left="140.0" top="150.0"/>
+        </GridPane.margin>
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label prefHeight="23.0" prefWidth="140.0" text="Menu generator">
+        <GridPane.margin>
+            <Insets bottom="50.0" left="90.0"/>
+        </GridPane.margin>
+        <font>
+            <Font name="System Font" size="18.0"/>
+        </font>
+    </Label>
+    <Label text="Desserts" GridPane.columnIndex="1">
+        <GridPane.margin>
+            <Insets left="130.0" top="150.0"/>
+        </GridPane.margin>
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label text="Recettes" GridPane.rowIndex="2" GridPane.columnSpan="2">
+        <GridPane.margin>
+            <Insets bottom="270.0" left="300.0" top="110.0"/>
+        </GridPane.margin>
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <ListView fx:id="recipesListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2"
+              GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="40.0"/>
+        </GridPane.margin>
+    </ListView>
 </GridPane>
