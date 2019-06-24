@@ -25,11 +25,11 @@ public class Controller {
     @FXML
     private TextField passwordField;
     @FXML
-    private ListView mealsListView;
+    private ListView<String> mealsListView;
     @FXML
-    private ListView dessertsListView;
+    private ListView<String> dessertsListView;
     @FXML
-    private ListView recipesListView;
+    private ListView<Hyperlink> recipesListView;
 
 
     private Api apiInstance = Api.getInstance();
@@ -48,7 +48,7 @@ public class Controller {
 
             window.setScene(tableViewScene);
             window.show();
-        } catch (IOException e) {
+        } catch (IOException | ApiAuthException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -58,54 +58,61 @@ public class Controller {
         mealsListView.getItems().clear();
         dessertsListView.getItems().clear();
 
-        JsonArray productsJson = Product.getFromStock();
+        try {
+            JsonArray productsJson = Product.getFromStock();
 
-        ArrayList<String> mealsList = new ArrayList<>();
-        ArrayList<String> dessertsList = new ArrayList<>();
+            ArrayList<String> mealsList = new ArrayList<>();
+            ArrayList<String> dessertsList = new ArrayList<>();
 
-        // Extract information from JSON and OFF API for each product
-        for (JsonElement product : productsJson) {
-            JsonObject productObj = product.getAsJsonObject();
-            String barcode = productObj.get("barcode").getAsString();
-            String name = productObj.get("name").getAsString();
+            // Extract information from JSON and OFF API for each product
+            for (JsonElement product : productsJson) {
+                JsonObject productObj = product.getAsJsonObject();
+                String barcode = productObj.get("barcode").getAsString();
+                String name = productObj.get("name").getAsString();
 
-            // Get product metadata from OFF
-            String productInfo = OpenFoodFacts.getProductInfo(barcode);
+                // Get product metadata from OFF
+                String productInfo = OpenFoodFacts.getProductInfo(barcode);
 
-            // Extract categories for product
-            JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
-            JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
-            JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
-            ArrayList categoriesList = new Gson().fromJson(categoriesTag.toString(), ArrayList.class);
+                // Extract categories for product
+                JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
+                JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
+                JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
+                ArrayList categoriesList = new Gson().fromJson(categoriesTag.toString(), ArrayList.class);
 
-            // Sort products by category
-            if (categoriesList.contains("en:meals")) {
-                mealsList.add(name);
-            } else if (categoriesList.contains("en:desserts")) {
-                dessertsList.add(name);
+                // Sort products by category
+                if (categoriesList.contains("en:meals")) {
+                    mealsList.add(name);
+                } else if (categoriesList.contains("en:desserts")) {
+                    dessertsList.add(name);
+                }
+                // More categories can be managed. For now other products are ignored.
             }
-            // More categories can be managed. For now other products are ignored.
-        }
 
-        // Populate ListViews with categories
-        mealsListView.getItems().addAll(mealsList);
-        dessertsListView.getItems().addAll(dessertsList);
+            // Populate ListViews with categories
+            mealsListView.getItems().addAll(mealsList);
+            dessertsListView.getItems().addAll(dessertsList);
+        } catch (ProductApiException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
     public void loadRecipies() {
         recipesListView.getItems().clear();
 
-        JsonArray productsJson = Product.getFromStock();
+        try {
+            JsonArray productsJson = Product.getFromStock();
 
-        // Load recipes for each product
-        for (JsonElement product : productsJson) {
-            JsonObject productObj = product.getAsJsonObject();
-            String name = productObj.get("name").getAsString();
+            // Load recipes for each product
+            for (JsonElement product : productsJson) {
+                JsonObject productObj = product.getAsJsonObject();
+                String name = productObj.get("name").getAsString();
 
-            addRecipes(name);
+                addRecipes(name);
+            }
+        } catch (ProductApiException e) {
+            System.out.println(e.getMessage());
         }
-
     }
 
     // Add recipes with this product to the ListView

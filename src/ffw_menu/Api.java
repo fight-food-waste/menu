@@ -15,7 +15,7 @@ class Api {
         return ApiInstance;
     }
 
-    void login(String email, String password) {
+    void login(String email, String password) throws ApiAuthException {
 
         String url = "http://localhost:3000/auth";
 
@@ -23,6 +23,8 @@ class Api {
 
         if (!tokenRawJson.isEmpty()) {
             this.token = new JsonParser().parse(tokenRawJson).getAsJsonObject().get("token").getAsString();
+        } else {
+            throw new ApiAuthException();
         }
     }
 

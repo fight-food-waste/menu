@@ -6,13 +6,17 @@ import kong.unirest.Unirest;
 
 class Product {
 
-    static JsonArray getFromStock() {
+    static JsonArray getFromStock() throws ProductApiException {
 
         Api api = Api.getInstance();
 
         String url = "http://localhost:3000/products/in-stock";
 
         String rawJson = Unirest.get(url).header("token", api.getToken()).asJson().getBody().toString();
+
+        if (rawJson.isEmpty()) {
+            throw new ProductApiException();
+        }
 
         return new JsonParser().parse(rawJson).getAsJsonArray();
     }
