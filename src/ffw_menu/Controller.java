@@ -31,22 +31,23 @@ public class Controller {
     @FXML
     private ListView<Hyperlink> recipesListView;
 
-
-    private Api apiInstance = Api.getInstance();
+    private Api api = Api.getInstance();
 
     @FXML
     public void onLoginButtonClicked(ActionEvent event) {
 
         try {
-            apiInstance.login(emailField.getText(), passwordField.getText());
+            api.login(emailField.getText(), passwordField.getText()); // Can throw ApiAuthException
 
-            Parent tableViewParent = FXMLLoader.load(getClass().getResource("menu.fxml"));
-            Scene tableViewScene = new Scene(tableViewParent);
+            // Load new scene with the products and menus
+            Parent menuParent = FXMLLoader.load(getClass().getResource("menu.fxml"));
+            Scene menuScene = new Scene(menuParent);
 
-            // This line gets the Stage information
+            // Get the current window/stage object
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            window.setScene(tableViewScene);
+            // Switch scene
+            window.setScene(menuScene);
             window.show();
         } catch (IOException | ApiAuthException e) {
             System.out.println(e.getMessage());
@@ -59,8 +60,10 @@ public class Controller {
         dessertsListView.getItems().clear();
 
         try {
+            // Get products from FFW API
             JsonArray productsJson = Product.getFromStock();
 
+            // Init empty lists to sort the products later
             ArrayList<String> mealsList = new ArrayList<>();
             ArrayList<String> dessertsList = new ArrayList<>();
 
@@ -71,12 +74,10 @@ public class Controller {
                 String name = productObj.get("name").getAsString();
 
                 // Get product metadata from OFF
-                String productInfo = OpenFoodFacts.getProductInfo(barcode);
+                JsonObject productInfo = OpenFoodFacts.getProductInfo(barcode);
 
                 // Extract categories for product
-                JsonObject productInfoJson = new JsonParser().parse(productInfo).getAsJsonObject();
-                JsonObject productInfoJsonProduct = productInfoJson.getAsJsonObject("product");
-                JsonArray categoriesTag = productInfoJsonProduct.getAsJsonArray("categories_tags");
+                JsonArray categoriesTag = productInfo.getAsJsonArray("categories_tags");
                 ArrayList categoriesList = new Gson().fromJson(categoriesTag.toString(), ArrayList.class);
 
                 // Sort products by category
@@ -101,6 +102,7 @@ public class Controller {
         recipesListView.getItems().clear();
 
         try {
+            // Get products from FFW API
             JsonArray productsJson = Product.getFromStock();
 
             // Load recipes for each product
@@ -108,6 +110,7 @@ public class Controller {
                 JsonObject productObj = product.getAsJsonObject();
                 String name = productObj.get("name").getAsString();
 
+                // Add it to the ListView
                 addRecipes(name);
             }
         } catch (ProductApiException e) {
@@ -120,7 +123,7 @@ public class Controller {
 
         try {
             HashMap<String, ArrayList<String>> map = Recipe.search(product);
-
+            // Recipes API search return 2 lists in an map, extract them
             ArrayList<String> recipesTitle = map.get("recipesTitle");
             ArrayList<String> recipesUrl = map.get("recipesUrl");
 
@@ -128,6 +131,7 @@ public class Controller {
                 final String recipeTitle = recipesTitle.get(i);
                 final String recipeUrl = recipesUrl.get(i);
 
+                // Each recipe will be an hyperlink
                 Hyperlink hyperlink = new Hyperlink();
                 hyperlink.setText(recipeTitle);
 
@@ -142,6 +146,7 @@ public class Controller {
                     }
                 });
 
+                // Add hyperlink to ListView
                 recipesListView.getItems().add(hyperlink);
             }
         } catch (RecipeApiException e) {

@@ -6,22 +6,29 @@ import kong.unirest.Unirest;
 class Api {
 
     private String token;
-    private static Api ApiInstance = new Api();
+    private static Api instance;
+    private static String endpoint = "http://localhost:3000";
 
+    // Singleton
     private Api() {
     }
 
     static Api getInstance() {
-        return ApiInstance;
+        if (instance == null) {
+            instance = new Api();
+        }
+        return instance;
     }
 
     void login(String email, String password) throws ApiAuthException {
 
-        String url = "http://localhost:3000/auth";
-
-        String tokenRawJson = Unirest.post(url).field("email", email).field("password", password).asJson().getBody().toString();
+        String tokenRawJson = Unirest.post(endpoint + "/auth").
+                field("email", email).
+                field("password", password)
+                .asJson().getBody().toString();
 
         if (!tokenRawJson.isEmpty()) {
+            // Extract token from JSON
             this.token = new JsonParser().parse(tokenRawJson).getAsJsonObject().get("token").getAsString();
         } else {
             throw new ApiAuthException();

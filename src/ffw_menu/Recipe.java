@@ -13,9 +13,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class Recipe {
+class Recipe {
 
-    public static HashMap<String, ArrayList<String>> search(String keyword) throws RecipeApiException {
+    static HashMap<String, ArrayList<String>> search(String keyword) throws RecipeApiException {
 
         try {
             String encodedKeyword = URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString());
@@ -30,26 +30,28 @@ public class Recipe {
             try {
                 SAXReader reader = new SAXReader();
                 Document document = reader.read(new StringReader(recipesXml)); // Can throw DocumentException
-                Element rootElement = document.getRootElement();
+                Element recipeSearchResult = document.getRootElement();
 
                 // Iterate down the XML to extract title and URL for each recipe
-                Iterator<Element> itr = rootElement.elementIterator();
-                while (itr.hasNext()) {
-                    Element element = itr.next();
-                    if (element.getName().equals("Results")) {
-                        Iterator<Element> itr2 = element.elementIterator();
-                        while (itr2.hasNext()) {
-                            Element element2 = itr2.next();
-                            if (element2.getName().equals("RecipeInfo")) {
+                // RecipeSearchResult -> Results -> RecipeInfo -> Title/WebURL
+                Iterator<Element> recipeSearchResultItr = recipeSearchResult.elementIterator();
+                while (recipeSearchResultItr.hasNext()) {
+                    Element recipeSearchResultElement = recipeSearchResultItr.next();
+                    if (recipeSearchResultElement.getName().equals("Results")) {
+                        Iterator<Element> resultsItr = recipeSearchResultElement.elementIterator();
+                        while (resultsItr.hasNext()) {
+                            // We will iterate trough multiple recipes
+                            Element resultsElement = resultsItr.next();
+                            if (resultsElement.getName().equals("RecipeInfo")) {
                                 // We're in a recipe here
-                                Iterator<Element> itr3 = element2.elementIterator();
+                                Iterator<Element> recipeInfoItr = resultsElement.elementIterator();
                                 String title = "", webUrl = "";
-                                while (itr3.hasNext()) {
-                                    Node node = itr3.next();
-                                    if (node.getName().equals("Title")) {
-                                        title = node.getText();
-                                    } else if (node.getName().equals("WebURL")) {
-                                        webUrl = node.getText();
+                                while (recipeInfoItr.hasNext()) {
+                                    Node recipeInfoElement = recipeInfoItr.next();
+                                    if (recipeInfoElement.getName().equals("Title")) {
+                                        title = recipeInfoElement.getText();
+                                    } else if (recipeInfoElement.getName().equals("WebURL")) {
+                                        webUrl = recipeInfoElement.getText();
                                     }
                                 }
                                 recipesTitle.add(title);
@@ -59,7 +61,7 @@ public class Recipe {
                     }
                 }
 
-                // Return the two ArrayList as a Hashmap
+                // Return the two ArrayList as a Hashmap (can't return 2 variables)
                 HashMap<String, ArrayList<String>> map = new HashMap<>();
                 map.put("recipesTitle", recipesTitle);
                 map.put("recipesUrl", recipesUrl);
