@@ -11,7 +11,9 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 class Recipe {
 
@@ -21,8 +23,12 @@ class Recipe {
             String encodedKeyword = URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString());
 
             // Get recipies as XML from BigOven
-            String url = "http://api.bigoven.com/recipes?title_kw=" + encodedKeyword + "&pg=1&rpp=20&api_key=glFUKikehWjLW900etpS564VgIzOWSW5";
-            String recipesXml = Unirest.get(url).asString().getBody();
+            String recipesXml = Unirest.get("http://api.bigoven.com/recipes")
+                    .queryString("title_kw", encodedKeyword)
+                    .queryString("pg", "1") // page number
+                    .queryString("rpp", "20") // results per page
+                    .queryString("api_key", "glFUKikehWjLW900etpS564VgIzOWSW5")
+                    .asString().getBody();
 
             ArrayList<String> recipesTitle = new ArrayList<>();
             ArrayList<String> recipesUrl = new ArrayList<>();
@@ -47,11 +53,11 @@ class Recipe {
                                 Iterator<Element> recipeInfoItr = resultsElement.elementIterator();
                                 String title = "", webUrl = "";
                                 while (recipeInfoItr.hasNext()) {
-                                    Node recipeInfoElement = recipeInfoItr.next();
-                                    if (recipeInfoElement.getName().equals("Title")) {
-                                        title = recipeInfoElement.getText();
-                                    } else if (recipeInfoElement.getName().equals("WebURL")) {
-                                        webUrl = recipeInfoElement.getText();
+                                    Node recipeInfoNode = recipeInfoItr.next();
+                                    if (recipeInfoNode.getName().equals("Title")) {
+                                        title = recipeInfoNode.getText();
+                                    } else if (recipeInfoNode.getName().equals("WebURL")) {
+                                        webUrl = recipeInfoNode.getText();
                                     }
                                 }
                                 recipesTitle.add(title);

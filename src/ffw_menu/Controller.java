@@ -1,6 +1,9 @@
 package ffw_menu;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,15 +43,15 @@ public class Controller {
             api.login(emailField.getText(), passwordField.getText()); // Can throw ApiAuthException
 
             // Load new scene with the products and menus
-            Parent menuParent = FXMLLoader.load(getClass().getResource("menu.fxml"));
+            Parent menuParent = FXMLLoader.load(getClass().getResource("menu.fxml")); // Can throw IOException
             Scene menuScene = new Scene(menuParent);
 
             // Get the current window/stage object
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             // Switch scene
-            window.setScene(menuScene);
-            window.show();
+            currentStage.setScene(menuScene);
+            currentStage.show();
         } catch (IOException | ApiAuthException e) {
             System.out.println(e.getMessage());
         }
@@ -61,7 +64,7 @@ public class Controller {
 
         try {
             // Get products from FFW API
-            JsonArray productsJson = Product.getFromStock();
+            JsonArray productsJson = Product.getFromStock(); // Can throw ProductApiException
 
             // Init empty lists to sort the products later
             ArrayList<String> mealsList = new ArrayList<>();

@@ -10,10 +10,6 @@
 <?import javafx.scene.text.Text?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" alignment="center" hgap="10" vgap="10"
           xmlns="http://javafx.com/javafx/8.0.999-ea" fx:controller="ffw_menu.Controller">
-    <Text fx:id="loginTitle" text="Login" GridPane.rowIndex="1"/>
-    <TextField fx:id="emailField" promptText="email" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <PasswordField fx:id="passwordField" promptText="password" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-    <Button onAction="#onLoginButtonClicked" text="Login" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="0"
                GridPane.rowSpan="1">
         <image>
@@ -23,14 +19,18 @@
             <Insets left="30.0"/>
         </GridPane.margin>
     </ImageView>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-       <RowConstraints/>
-       <RowConstraints/>
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-   </rowConstraints>
+    <Text fx:id="loginTitle" text="Login" GridPane.rowIndex="1"/>
+    <TextField fx:id="emailField" promptText="email" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <PasswordField fx:id="passwordField" promptText="password" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <Button onAction="#onLoginButtonClicked" text="Login" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <columnConstraints>
+        <ColumnConstraints/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+    </rowConstraints>
 </GridPane>
