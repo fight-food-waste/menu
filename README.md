@@ -1,4 +1,4 @@
-# Fight Food Waste Menu Generator
+# Fight Food Waste - Menu Generator
 
 Requirements:
 
