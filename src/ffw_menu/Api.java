@@ -7,7 +7,7 @@ class Api {
 
     private String token;
     private static Api instance;
-    private static String endpoint = "http://localhost:3000";
+    private static String endpoint = "https://api.fight-food-waste.com";
 
     // Singleton
     private Api() {

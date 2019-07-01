@@ -69,7 +69,7 @@
             <Font size="14.0"/>
         </font>
     </Label>
-    <Label text="Recettes" GridPane.rowIndex="2" GridPane.columnSpan="2">
+    <Label text="Recipes" GridPane.rowIndex="2" GridPane.columnSpan="2">
         <GridPane.margin>
             <Insets bottom="270.0" left="300.0" top="110.0"/>
         </GridPane.margin>

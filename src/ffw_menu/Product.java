@@ -6,7 +6,7 @@ import kong.unirest.Unirest;
 
 class Product {
 
-    private static String endpoint = "http://localhost:3000";
+    private static String endpoint = "https://api.fight-food-waste.com";
 
     static JsonArray getFromStock() throws ProductApiException {
 
