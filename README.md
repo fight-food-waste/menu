@@ -17,6 +17,6 @@ They will be downloaded from Maven by Intellij.
 
 3 APIs are being used:
 
-- [FightFoodWaste](../ffw-api) to get products from the stock
+- [FightFoodWaste](https://github.com/fight-food-waste/api) to get products from the stock
 - [OpenFoodFacts](https://en.wiki.openfoodfacts.org/API) for the products information
 - [BigOver v1](http://api.bigoven.com/) for recipes
